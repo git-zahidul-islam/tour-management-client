@@ -1,21 +1,75 @@
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
+import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Password from "@/components/ui/Password";
+import { useRegisterMutation } from "@/redux/features/auth/auth.api";
+import { toast } from "sonner";
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Link } from "react-router"
-import { Form, useForm } from "react-hook-form"
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import Password from "@/components/ui/Password"
+const registerSchema = z
+  .object({
+    name: z
+      .string()
+      .min(3, {
+        error: "Name is too short",
+      })
+      .max(50),
+    email: z.email(),
+    password: z.string().min(8, { error: "Password is too short" }),
+    confirmPassword: z
+      .string()
+      .min(8, { error: "Confirm Password is too short" }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Password do not match",
+    path: ["confirmPassword"],
+  });
 
-export function RegisterFrom({
+export function RegisterForm({
   className,
   ...props
-}: React.ComponentProps<"form">) {
-  const form = useForm();
+}: React.HTMLAttributes<HTMLDivElement>) {
+  const [register] = useRegisterMutation();
+  const navigate = useNavigate();
 
-  const onSubmit = (data: any) => {
-    console.log("data", data);
-  }
+  const form = useForm<z.infer<typeof registerSchema>>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+  });
+
+  const onSubmit = async (data: z.infer<typeof registerSchema>) => {
+    const userInfo = {
+      name: data.name,
+      email: data.email,
+      password: data.password,
+    };
+
+    try {
+      const result = await register(userInfo).unwrap();
+      console.log(result);
+      toast.success("User created successfully");
+      navigate("/verify");
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -65,7 +119,7 @@ export function RegisterFrom({
                 </FormItem>
               )}
             />
-            {/* <FormField
+            <FormField
               control={form.control}
               name="password"
               render={({ field }) => (
@@ -80,8 +134,8 @@ export function RegisterFrom({
                   <FormMessage />
                 </FormItem>
               )}
-            /> */}
-            {/* <FormField
+            />
+            <FormField
               control={form.control}
               name="confirmPassword"
               render={({ field }) => (
@@ -96,7 +150,7 @@ export function RegisterFrom({
                   <FormMessage />
                 </FormItem>
               )}
-            /> */}
+            />
             <Button type="submit" className="w-full">
               Submit
             </Button>
@@ -125,5 +179,5 @@ export function RegisterFrom({
         </Link>
       </div>
     </div>
-  )
+  );
 }
