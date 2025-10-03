@@ -1,7 +1,7 @@
-import React from 'react'
-
 export default function AddTour() {
   return (
-    <div>AddTour</div>
-  )
+    <div>
+      <h1> This is AddTour component </h1>
+    </div>
+  );
 }

@@ -7,15 +7,15 @@ export interface IResponse<T> {
   success: boolean;
   message: string;
   data: T;
-};
+}
 
 export interface ISidebarItem {
   title: string;
-  items : {
+  items: {
     title: string;
     url: string;
-    components: ComponentType;
+    component: ComponentType;
   }[];
 }
 
-export type TRole = "SUPER_ADMIN" | "ADMIN" | "USER"
+export type TRole = "SUPER_ADMIN" | "ADMIN" | "USER";
