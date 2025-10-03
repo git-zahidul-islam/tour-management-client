@@ -1,4 +1,4 @@
-import * as React from "react"
+import * as React from "react";
 import {
   Sidebar,
   SidebarContent,
@@ -10,27 +10,25 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
-} from "@/components/ui/sidebar"
-import Logo from "@/assets/icons/Logo"
-import { Link } from "react-router"
-import { getSidebarItems } from "@/utils/getSIdebarItems"
-import { useUserInfoQuery } from "@/redux/features/auth/auth.api"
-
-// This is sample data.
-
+} from "@/components/ui/sidebar";
+import Logo from "@/assets/icons/Logo";
+import { Link } from "react-router";
+import { getSidebarItems } from "@/utils/getSidebarItems";
+import { useUserInfoQuery } from "@/redux/features/auth/auth.api";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { data: userData } = useUserInfoQuery(undefined);
-  console.log("role is::", userData);
-  
+
   const data = {
     navMain: getSidebarItems(userData?.data?.role),
-  }
+  };
 
   return (
     <Sidebar {...props}>
-      <SidebarHeader>
-        <Logo />
+      <SidebarHeader className="items-center">
+        <Link to="/">
+          <Logo />
+        </Link>
       </SidebarHeader>
       <SidebarContent>
         {/* We create a SidebarGroup for each parent. */}
@@ -41,7 +39,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <SidebarMenu>
                 {item.items.map((item) => (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton className="text-xl" asChild isActive={item.isActive}>
+                    <SidebarMenuButton asChild>
                       <Link to={item.url}>{item.title}</Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -53,5 +51,5 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }

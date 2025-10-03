@@ -1,27 +1,40 @@
+import AddTour from "@/pages/Admin/AddTour";
+import AddTourType from "@/pages/Admin/AddTourType";
+// import Analytics from "@/pages/Admin/Analytics";
 import { ISidebarItem } from "@/types";
 import { lazy } from "react";
-const AddTour = lazy(()=> import("@/pages/admin/AddTour"));
-const Analytics = lazy(()=> import("@/pages/admin/Analytics"));
 
-export const adminSidebarItems : ISidebarItem[] = [
-    {
-      title: "Dasboard",
-      items: [
-        {
-          title: "analyties",
-          url: "/admin/analyties",
-          components : Analytics,
-        }
-      ],
-    },
-    {
-      title: "Tour management",
-      items: [
-        {
-          title: "Add Tour",
-          url: "/admin/add-tour",
-          components : AddTour,
-        }
-      ],
-    }
-]
+const Analytics = lazy(() => import("@/pages/Admin/Analytics"));
+
+export const adminSidebarItems: ISidebarItem[] = [
+  {
+    title: "Dashboard",
+    items: [
+      {
+        title: "Analytics",
+        url: "/admin/analytics",
+        component: Analytics,
+      },
+    ],
+  },
+  {
+    title: "Tour Management",
+    items: [
+      {
+        title: "Add Tour Type",
+        url: "/admin/add-tour-type",
+        component: AddTourType,
+      },
+      {
+        title: "Add Tour",
+        url: "/admin/add-tour",
+        component: AddTour,
+      },
+      {
+        title: "Habi Jabi",
+        url: "/admin/habijabi",
+        component: AddTour,
+      },
+    ],
+  },
+];
